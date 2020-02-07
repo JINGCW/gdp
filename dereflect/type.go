@@ -243,6 +243,41 @@ type nameOff int32 // offset to a name
 type typeOff int32 // offset to an *rtype
 type textOff int32 // offset from top of text section
 
+func (t*rtype)uncommon()*uncommonType{
+	return nil//todo
+}
+
+func (t*rtype)String()string{
+	return "nil"//todo
+}
+
+func (t*rtype)Size()uintptr{return t.size}
+
+func (t*rtype)Bits()int{
+	if t==nil{
+		panic("derefect: Bits of nil Type")
+	}
+	k:=t.Kind()
+	if k<Int||k>Complex128{
+		panic("dereflect: Bits of non-arithmetic Type"+t.String())
+	}
+	return int(t.size)*8
+}
+
+func (t*rtype)Align()int{return int(t.align)}
+
+func (t*rtype)FieldAlign()int  {
+	return int(t.fieldAlign)
+}
+
+//func (t *rtype) Kind() exists
+
+func (t*rtype)pointers()bool  {
+	return t.ptrdata!=0
+}
+
+func (t*rtype)common()*rtype{return t}
+
 type typeAlg struct {
 	// function for hashing objects of this type
 	// (ptr to object, seed) -> hash

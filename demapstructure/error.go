@@ -1,6 +1,7 @@
 package demapstructure
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -21,4 +22,24 @@ func (e *Error) Error() string {
 	return fmt.Sprintf(
 		"%d error(s) decoding:\n\n%s",
 		len(e.Errors), strings.Join(points, "\n"))
+}
+
+func (e *Error) WrappedErrors() []error {
+	if e == nil {
+		return nil
+	}
+	out := make([]error, len(e.Errors))
+	for i, e := range e.Errors {
+		out[i] = errors.New(e)
+	}
+	return out
+}
+
+func appendErrors(errors []string, err error) []string {
+	switch e := err.(type) {
+	case *Error:
+		return append(errors, e.Errors...)
+	default:
+		return append(errors, e.Error())
+	}
 }

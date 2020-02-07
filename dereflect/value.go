@@ -76,6 +76,29 @@ func ValueOf(i interface{}) Value {
 	return UnpackEface(i)
 }
 
+func(v Value)Kind()Kind{
+	return v.kind()
+}
+
+func (f flag)kind()Kind{
+	return Kind(f&flagKindMask)
+}
+
+type ValueError struct {
+	Method string
+	Kind Kind
+}
+
+func (v Value)Type()Type{
+	f:=v.flag
+	if f==0{
+		panic(&ValueError{"dereflect.Value.Type",Invalid})
+	}
+	if f&flagMethod==0{
+		return v.typ
+	}
+}
+
 type StringHeader struct {
 	Data uintptr
 	Len int
