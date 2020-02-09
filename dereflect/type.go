@@ -239,11 +239,71 @@ type StructTag string
 
 type tflag uint8
 
+const (
+	//tflagUncommon means that there is a pointer, *uncommonType,
+	//just beyond the outer type structure.
+	//
+	//For example, if t.Kind()==Struct and t.tflag&tflagUncommon!=0,
+	//then t has uncommonType data and it can be accessed as:
+	//
+	//type tUncommon struct{
+	//    structType
+	//    u uncommonType
+	//}
+	//u:=&(*tUncommon)(unsafe.Pointer(t)).u
+	tflagUncommon tflag=1<<0
+
+	//tflagExtraStar means the name in the str field has an
+	//extraneous '*' prefix. This is because for most types T in
+	//a program, the type *T also exists and reusing the str data
+	//saves binary size.
+	tflagExtraStar tflag=1<<1
+
+	//tflagNamed means the type has a name.
+	tflagNamed tflag=1<<2
+)
+
 type nameOff int32 // offset to a name
 type typeOff int32 // offset to an *rtype
 type textOff int32 // offset from top of text section
 
+//structTyoe represents a struct type.
+type structType struct {
+	rtype
+	pkgPath name
+	fields []structField//sorted by offset
+}
+
+type structTypeUncommon struct {
+	structType
+	u uncommonType
+}
+
+//ptrType represents a pointer type.
+type ptrType struct {
+	rtype
+	elem *rtype//pointer element (pointed at) type
+}
+
+//sliceType represents a slice type.
+type sliceType struct {
+	rtype
+	elem *rtype//slice element type
+}
+
+
 func (t*rtype)uncommon()*uncommonType{
+	if t.tflag&tflagUncommon==0{
+		return nil
+	}
+	switch t.Kind() {
+	case Struct:
+		return &(*structTypeUncommon)(unsafe.Pointer(t)).u
+	case Ptr:
+		type u struct {
+
+		}
+	}
 	return nil//todo
 }
 
@@ -277,6 +337,22 @@ func (t*rtype)pointers()bool  {
 }
 
 func (t*rtype)common()*rtype{return t}
+
+//Method on non-interface type
+type method struct {
+	name nameOff//name of method
+	mtyp typeOff//method type (without receiver)
+	ifn textOff//fn used in interface call (one-word receiver)
+	tfn textOff//fn used for normal method call
+}
+
+func (t*rtype)exportedMethods()[]method{
+	ut:=t.uncommon()
+	if ut==nil{
+		return nil
+	}
+	return nil
+}
 
 type typeAlg struct {
 	// function for hashing objects of this type
