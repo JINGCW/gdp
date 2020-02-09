@@ -1,6 +1,7 @@
 package dereflect
 
 import (
+	"strconv"
 	"unsafe"
 )
 // Type is the representation of a Go type.
@@ -221,19 +222,33 @@ const (
 	BothDir = RecvDir | SendDir             // chan
 )
 
-type StructField struct {
-	Name string
-	// PkgPath is the package path that qualifies a lower case (unexported)
-	// field name. It is empty for upper case (exported) field names.
-	// See https://golang.org/ref/spec#Uniqueness_of_identifiers
-	PkgPath string
-
-	Type Type
-	Tag StructTag
-	Offset uintptr //offset within struct, in bytes
-	Index []int //index sequence for Type.FieldByIndex
-	Anonymous bool //is an embedded field
+//arrayType represents a fixed array type.
+type arrayType struct {
+	rtype
+	elem *rtype//array element type
+	slice *rtype//slice type
+	len uintptr
 }
+
+type chanType struct {
+	rtype
+	elem *rtype//channel element type
+	dir uintptr//channel direction (ChanDir)
+}
+
+//type StructField struct {
+//	Name string
+//	// PkgPath is the package path that qualifies a lower case (unexported)
+//	// field name. It is empty for upper case (exported) field names.
+//	// See https://golang.org/ref/spec#Uniqueness_of_identifiers
+//	PkgPath string
+//
+//	Type Type
+//	Tag StructTag
+//	Offset uintptr //offset within struct, in bytes
+//	Index []int //index sequence for Type.FieldByIndex
+//	Anonymous bool //is an embedded field
+//}
 
 type StructTag string
 
@@ -267,22 +282,37 @@ type nameOff int32 // offset to a name
 type typeOff int32 // offset to an *rtype
 type textOff int32 // offset from top of text section
 
-//structTyoe represents a struct type.
-type structType struct {
-	rtype
-	pkgPath name
-	fields []structField//sorted by offset
-}
-
 type structTypeUncommon struct {
 	structType
 	u uncommonType
 }
 
-//ptrType represents a pointer type.
-type ptrType struct {
+////ptrType represents a pointer type.
+//type ptrType struct {
+//	rtype
+//	elem *rtype//pointer element (pointed at) type
+//}
+
+//Struct field
+type structField struct {
+	name name//name is always non-empty
+	typ *rtype//type of field
+	offsetEmbed uintptr//byte offset of field<<1|isEmbedded
+}
+
+func (f*structField)offset()uintptr{
+	return f.offsetEmbed>>1
+}
+
+func (f*structField)embedded()bool{
+	return f.offsetEmbed&1!=0
+}
+
+//structType represents a struct type.
+type structType struct {
 	rtype
-	elem *rtype//pointer element (pointed at) type
+	pkgPath name
+	fields []structField//sorted by offset
 }
 
 //sliceType represents a slice type.
@@ -291,6 +321,53 @@ type sliceType struct {
 	elem *rtype//slice element type
 }
 
+//funcType represents a function type.
+//
+//A *rtype for each in and out parameter is stored in an array that
+//directly follows the funcType (and possibly its uncommonType). So
+//a function type with one method, one input, and one output is:
+//
+//struct {
+//    funcType
+//    uncommonType
+//    [2]*rtype //[0] is in, [1] is out
+//}
+type funcType struct {
+	rtype
+	inCount uint16
+	outCount uint16
+}
+
+//imethod represents a method on an interface type
+type imethod struct {
+	name nameOff//name of method
+	typ typeOff//.(*FuncType) underneath
+}
+
+//interfaceType represents an interface type.
+type interfaceType struct {
+	rtype
+	pkgPath name//import path
+	methods []imethod
+}
+
+//mapType represents a map type.
+type mapType struct {
+	rtype
+	key *rtype//map key type
+	elem *rtype//map element (value) type
+	bucket *rtype//internal bucket structure
+	keysize uint8//size of key slot
+	valuesize uint8//size of value slot
+	bucketsize uint16//size of bucket
+	flags uint32
+}
+
+//ptrType represents a pointer type.
+type ptrType struct {
+	rtype
+	elem *rtype//pointer element (pointed at) type
+}
 
 func (t*rtype)uncommon()*uncommonType{
 	if t.tflag&tflagUncommon==0{
@@ -301,10 +378,53 @@ func (t*rtype)uncommon()*uncommonType{
 		return &(*structTypeUncommon)(unsafe.Pointer(t)).u
 	case Ptr:
 		type u struct {
-
+		ptrType
+		u uncommonType
 		}
+		return &(*u)(unsafe.Pointer(t)).u
+	case Func:
+		type u struct {
+		funcType
+		u uncommonType
+		}
+		return &(*u)(unsafe.Pointer(t)).u
+	case Slice:
+		type u struct {
+		sliceType
+		u uncommonType
+		}
+		return &(*u)(unsafe.Pointer(t)).u
+	case Array:
+		type u struct {
+		arrayType
+		u uncommonType
+		}
+		return &(*u)(unsafe.Pointer(t)).u
+	case Chan:
+		type u struct {
+		chanType
+		u uncommonType
+		}
+		return &(*u)(unsafe.Pointer(t)).u
+	case Map:
+		type u struct {
+		mapType
+		u uncommonType
+		}
+		return &(*u)(unsafe.Pointer(t)).u
+	case Interface:
+		type u struct {
+		interfaceType
+		u uncommonType
+		}
+		return &(*u)(unsafe.Pointer(t)).u
+	default:
+		type u struct {
+		rtype
+		u uncommonType
+		}
+		return &(*u)(unsafe.Pointer(t)).u
 	}
-	return nil//todo
 }
 
 func (t*rtype)String()string{
@@ -351,7 +471,7 @@ func (t*rtype)exportedMethods()[]method{
 	if ut==nil{
 		return nil
 	}
-	return nil
+	return ut.exportedMethods()
 }
 
 type typeAlg struct {
@@ -424,6 +544,58 @@ const (
 	kindGCProg      = 1 << 6 // Type.gc points to GC program
 	kindMask        = (1 << 5) - 1
 )
+
+//String returns the name of k.
+func(k Kind)String()string{
+	if int(k)<len(kindNames){
+		return kindNames[k]
+	}
+	return "kind"+strconv.Itoa(int(k))
+}
+
+var kindNames=[]string{
+	Invalid:       "invalid",
+	Bool:          "bool",
+	Int:           "int",
+	Int8:          "int8",
+	Int16:         "int16",
+	Int32:         "int32",
+	Int64:         "int64",
+	Uint:          "uint",
+	Uint8:         "uint8",
+	Uint16:        "uint16",
+	Uint32:        "uint32",
+	Uint64:        "uint64",
+	Uintptr:       "uintptr",
+	Float32:       "float32",
+	Float64:       "float64",
+	Complex64:     "complex64",
+	Complex128:    "complex128",
+	Array:         "array",
+	Chan:          "chan",
+	Func:          "func",
+	Interface:     "interface",
+	Map:           "map",
+	Ptr:           "ptr",
+	Slice:         "slice",
+	String:        "string",
+	Struct:        "struct",
+	UnsafePointer: "unsafe.Pointer",
+}
+
+func(t*uncommonType)methods()[]method{
+	if t.mcount==0{
+		return nil
+	}
+	return (*[1<<16]method)(add(unsafe.Pointer(t),uintptr(t.moff),"t.mcount>0"))[:t.mcount:t.mcount]
+}
+
+func(t*uncommonType)exportedMethods()[]method{
+	if t.xcount==0{
+		return nil
+	}
+	return (*[1<<16]method)(add(unsafe.Pointer(t),uintptr(t.moff),"t.mcount>0"))[:t.xcount:t.xcount]
+}
 
 func (t *rtype) Kind() Kind { return Kind(t.kind & kindMask) }
 
@@ -558,7 +730,7 @@ func NewName(n, tag string, exported bool) name {
  */
 
 //Struct field describes a single field in a struct.
-type structField struct {
+type StructField struct {
 	Name string
 	PkgPath string
 
