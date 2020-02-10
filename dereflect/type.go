@@ -474,6 +474,110 @@ func (t*rtype)exportedMethods()[]method{
 	return ut.exportedMethods()
 }
 
+//NumMethod returns the number of interface methods in the type's method set.
+func (t*interfaceType)NumMethod()int {
+	return len(t.methods)
+}
+
+func(t*rtype)NumMethod()int{
+	if t.Kind()==Interface{
+		tt:=(*interfaceType)(unsafe.Pointer(t))
+		return tt.NumMethod()
+	}
+	return len(t.exportedMethods())
+}
+
+func(t*rtype)Method(i int)Method{
+	return Method{
+		Name:    "",
+		PkgName: "",
+		Type:    nil,
+		Func:    Value{},
+		Index:   0,
+	}//todo
+}
+
+func(t*interfaceType)MethodByName(name string)(m Method,ok bool){
+	if t==nil{
+		return
+	}
+	return //todo
+}
+
+func(t*rtype)MethodByName(name string)(m Method,ok bool){
+	if t.Kind()==Interface{
+		tt:=(*interfaceType)(unsafe.Pointer(t))
+		return tt.MethodByName(name)
+	}
+	ut:=t.uncommon()
+	if ut==nil{
+		return Method{},false
+	}
+	//todo
+	return Method{},false
+}
+
+func(t*rtype)PkgPath()string{
+	if t.tflag&tflagNamed==0{
+		return ""
+	}
+	ut:=t.uncommon()
+	if ut==nil{
+		return ""
+	}
+	return ""//todo
+}
+
+func(t*rtype)Name()string{
+	if t.tflag&tflagNamed==0{
+		return ""
+	}
+	s:=t.String()
+	i:=len(s)-1
+	for i>=0&&s[i]!='.'{
+		i--
+	}
+	return s[i+1:]
+}
+
+func(t*rtype)ChanDir()ChanDir{
+	if t.Kind()!=Chan{
+		panic("dereflect: ChanDir of non-chan type")
+	}
+	tt:=(*chanType)(unsafe.Pointer(t))
+	return ChanDir(tt.dir)
+}
+
+func (t*rtype)IsVariadic()bool  {
+	if t.Kind()!=Func{
+		panic("dereflect: IsVariadic of non-func type")
+	}
+	tt:=(*funcType)(unsafe.Pointer(t))
+	return tt.outCount&(1<<15)!=0
+}
+
+//todo: rtype interface Type to do...
+func(t*rtype)Implements(u Type) bool{
+	return false
+}
+
+func(t*rtype)AssignableTo(u Type) bool{
+	return false
+}
+
+func(t*rtype)ConvertibleTo(u Type) bool{
+	return false
+}
+
+func(t*rtype)Comparable() bool{
+	return false
+}
+
+func(t*rtype)Elem() Type{
+	return nil
+}
+//todo
+
 type typeAlg struct {
 	// function for hashing objects of this type
 	// (ptr to object, seed) -> hash
