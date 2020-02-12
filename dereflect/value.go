@@ -89,15 +89,15 @@ type ValueError struct {
 	Kind Kind
 }
 
-func (v Value)Type()Type{
-	f:=v.flag
-	if f==0{
-		panic(&ValueError{"dereflect.Value.Type",Invalid})
-	}
-	if f&flagMethod==0{
-		return v.typ
-	}
-}
+//func (v Value)Type()Type{
+//	f:=v.flag
+//	if f==0{
+//		panic(&ValueError{"dereflect.Value.Type",Invalid})
+//	}
+//	if f&flagMethod==0{
+//		return v.typ
+//	}
+//}
 
 type StringHeader struct {
 	Data uintptr

@@ -1,8 +1,6 @@
 package main
 
-import (
-	"hash_collections/dereflect"
-)
+import "reflect"
 
 //
 //const (
@@ -21,23 +19,53 @@ import (
 //const temp  = (^uintptr(0) >> 1)
 //const MaxUintptr = ^uintptr(0)
 
-type type_interface interface {
-	type_func() string
+type rwer interface {
+	read()string
+	write()string
+}
+
+type reader interface {
+	Read() string
 }
 
 type concreate_type struct {
-	val string
+	Val string
 }
 
-func (e *concreate_type)type_func()string{
-	return e.val
+func (e *concreate_type)Read()string{
+	return e.Val
 }
+
 
 func main() {
-	var out  =concreate_type{"concreate_value"}
-	//out=&concreate_type{"concreate_value"}
-	//println(reflect.ValueOf(out).Type())
-	println(dereflect.ValueOf(out).Kind())
+	type Person struct {
+		Name   string
+		Age    int
+		Emails []string
+		Extra  map[string]string
+	}
+
+	// This input can come from anywhere, but typically comes from
+	// something like decoding JSON where we're not quite sure of the
+	// struct initially.
+	input := map[string]interface{}{
+		"name":   "Mitchell",
+		"age":    91,
+		"emails": []string{"one", "two", "three"},
+		"extra": map[string]string{
+			"twitter": "mitchellh",
+		},
+	}
+
+	var result Person
+	//var r1 reader
+	//r1=&concreate_type{"haha"}
+	//fmt.Println(reflect.ValueOf(iv).Elem())
+	//var iv type_interface=&concreate_type{"somthing"}
+	//var eface interface{}= (interface{})(*(*interface {
+	//	M()string
+	//})(unsafe.Pointer(reflect.ValueOf(err).Pointer())))
+	//var r2 rwer=r1
 	//out:="abcd"
 	//out2:=dereflect.ValueOf(out)
 	//fmt.Println(unsafe.Sizeof(out))
