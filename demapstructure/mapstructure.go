@@ -1,16 +1,19 @@
 package demapstructure
 
-import "reflect"
+import (
+	"errors"
+	"reflect"
+)
 
-type DecodeHookFunc interface {}
+type DecodeHookFunc interface{}
 
 //DocodeHookFuncType ia a DecodeHookFunc which has completely information about
 //the source and target types.
-type DecodeHookFuncType func(reflect.Type,reflect.Type,interface{})(interface{},error)
+type DecodeHookFuncType func(reflect.Type, reflect.Type, interface{}) (interface{}, error)
 
 // DecodeHookFuncKind is a DecodeHookFunc which knows only the Kinds of the
 // source and target types.
-type DecodeHookFuncKind func(reflect.Kind,reflect.Kind,interface{})(interface{},error)
+type DecodeHookFuncKind func(reflect.Kind, reflect.Kind, interface{}) (interface{}, error)
 
 type DecoderConfig struct {
 	//DecodeHook, if set, will be called before any decoding and any
@@ -84,3 +87,56 @@ type Decoder struct {
 
 //Decode takes an input structure and uses reflection to translate it to
 //the output structure. output must be a pointer to a map or struct.
+func Decode(input interface{}, output interface{}) error {
+	config := &DecoderConfig{
+		Metadata: nil,
+		Result:   output,
+	}
+
+	decoder,err:=NewDecoder(config)
+	if err!=nil{
+		return err
+	}
+	return decoder.Decode(input)
+}
+
+// NewDecoder returns a new decoder for the given configuration. Once
+// a decoder has been returned, the same configuration must not be used
+// again.
+func NewDecoder(config *DecoderConfig) (*Decoder, error) {
+	val := reflect.ValueOf(config.Result)
+	if val.Kind() != reflect.Ptr {
+		return nil, errors.New("result must be a pointer")
+	}
+
+	val = val.Elem()
+	if !val.CanAddr() {
+		return nil, errors.New("result must be addressable (a pointer)")
+	}
+
+	if config.Metadata != nil {
+		if config.Metadata.Keys == nil {
+			config.Metadata.Keys = make([]string, 0)
+		}
+		if config.Metadata.Unused == nil {
+			config.Metadata.Unused = make([]string, 0)
+		}
+	}
+
+	if config.TagName == "" {
+		config.TagName = "mapstructure"
+	}
+	result := &Decoder{config: config}
+	return result, nil
+}
+
+// Decode decodes the given raw interface to the target pointer specified
+// by the configuration.
+func(d*Decoder)Decode(input interface{})error{
+	return d.decode("",input,reflect.ValueOf(d.config.Result).Elem())
+}
+
+// Decodes an unknown data type into a specific reflection value.
+func (d*Decoder)decode(name string,input interface{},outVal reflect.Value)error{
+	return nil
+}

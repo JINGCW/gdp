@@ -1,6 +1,9 @@
 package main
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
 
 //
 //const (
@@ -48,16 +51,21 @@ func main() {
 	// This input can come from anywhere, but typically comes from
 	// something like decoding JSON where we're not quite sure of the
 	// struct initially.
-	input := map[string]interface{}{
-		"name":   "Mitchell",
-		"age":    91,
-		"emails": []string{"one", "two", "three"},
-		"extra": map[string]string{
-			"twitter": "mitchellh",
-		},
-	}
+	//input := map[string]interface{}{
+	//	"name":   "Mitchell",
+	//	"age":    91,
+	//	"emails": []string{"one", "two", "three"},
+	//	"extra": map[string]string{
+	//		"twitter": "mitchellh",
+	//	},
+	//}
 
-	var result Person
+	var result Person=Person{
+
+	}
+	ok:=reflect.ValueOf(&result).IsZero()
+	//dataValKind:=dataValType.Key().Kind()
+	fmt.Println(ok)
 	//var r1 reader
 	//r1=&concreate_type{"haha"}
 	//fmt.Println(reflect.ValueOf(iv).Elem())
