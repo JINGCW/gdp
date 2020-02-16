@@ -39,15 +39,23 @@ func (e *concreate_type)Read()string{
 	return e.Val
 }
 
+type test interface {
+	name()string
+}
+
+
 
 func main() {
+	//fmt.Println(reflect.ValueOf((*int)(nil)).Elem().IsNil())
 	type Person struct {
 		Name   string
 		Age    int
-		Emails []string
-		Extra  map[string]string
+		//Emails []string
+		//Extra  map[string]string
 	}
-
+	p:=reflect.ValueOf(nil)
+	pp:=&p
+	fmt.Println(reflect.ValueOf(pp).IsValid())
 	// This input can come from anywhere, but typically comes from
 	// something like decoding JSON where we're not quite sure of the
 	// struct initially.
@@ -60,12 +68,11 @@ func main() {
 	//	},
 	//}
 
-	var result Person=Person{
-
-	}
-	ok:=reflect.ValueOf(&result).IsZero()
+	//var result Person=Person{
+	//
+	//}
 	//dataValKind:=dataValType.Key().Kind()
-	fmt.Println(ok)
+
 	//var r1 reader
 	//r1=&concreate_type{"haha"}
 	//fmt.Println(reflect.ValueOf(iv).Elem())

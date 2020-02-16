@@ -93,8 +93,8 @@ func Decode(input interface{}, output interface{}) error {
 		Result:   output,
 	}
 
-	decoder,err:=NewDecoder(config)
-	if err!=nil{
+	decoder, err := NewDecoder(config)
+	if err != nil {
 		return err
 	}
 	return decoder.Decode(input)
@@ -132,11 +132,70 @@ func NewDecoder(config *DecoderConfig) (*Decoder, error) {
 
 // Decode decodes the given raw interface to the target pointer specified
 // by the configuration.
-func(d*Decoder)Decode(input interface{})error{
-	return d.decode("",input,reflect.ValueOf(d.config.Result).Elem())
+func (d *Decoder) Decode(input interface{}) error {
+	return d.decode("", input, reflect.ValueOf(d.config.Result).Elem())
 }
 
 // Decodes an unknown data type into a specific reflection value.
-func (d*Decoder)decode(name string,input interface{},outVal reflect.Value)error{
+func (d *Decoder) decode(name string, input interface{}, outVal reflect.Value) error {
+	var inputVal reflect.Value
+	if input != nil {
+		inputVal = reflect.ValueOf(input)
+		if inputVal.Kind() == reflect.Ptr && inputVal.IsNil() {
+			input = nil
+		}
+	}
+
+	if input == nil {
+		if d.config.ZeroFields {
+			outVal.Set(reflect.Zero(outVal.Type()))
+			if d.config.Metadata != nil && name != "" {
+				d.config.Metadata.Keys = append(d.config.Metadata.Keys, name)
+			}
+		}
+		return nil
+	}
+
+	if !inputVal.IsValid() {
+		outVal.Set(reflect.Zero(outVal.Type()))
+		if d.config.Metadata != nil && name != "" {
+			d.config.Metadata.Keys = append(d.config.Metadata.Keys, name)
+			return nil
+		}
+	}
+
+	var err error
+	outputKind:=getKind(outVal)
+	switch outputKind {
+	
+	}
+	
+
 	return nil
+}
+
+func(d*Decoder)decodeBool(name string,data interface{},val reflect.Value)error{
+	dataVal:=reflect.Indirect(reflect.ValueOf(data))
+	dataKind:=dataVal.Kind()
+
+	switch {
+	case dataKind==reflect.Bool:
+
+	}
+	return nil
+}
+
+func getKind(val reflect.Value) reflect.Kind {
+	kind := val.Kind()
+
+	switch {
+	case kind >= reflect.Int && kind <= reflect.Int64:
+		return reflect.Int
+	case kind >= reflect.Uint && kind <= reflect.Uint64:
+		return reflect.Uint
+	case kind >= reflect.Float32 && kind <= reflect.Float64:
+		return reflect.Float32
+	default:
+		return kind
+	}
 }
