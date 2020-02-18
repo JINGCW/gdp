@@ -52,7 +52,7 @@ func main() {
 		"emails": map[string]interface{}{}, // empty map => empty array
 	}
 	//var v *int
-	vv:=reflect.ValueOf(input["emails"]).Elem().Kind()
+	vv:=reflect.ValueOf(input["emails"]).Type().Elem().Kind()
 	fmt.Println(vv)
 	// This input can come from anywhere, but typically comes from
 	// something like decoding JSON where we're not quite sure of the
