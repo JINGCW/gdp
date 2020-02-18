@@ -46,16 +46,14 @@ type test interface {
 
 
 func main() {
-	//fmt.Println(reflect.ValueOf((*int)(nil)).Elem().IsNil())
-	type Person struct {
-		Name   string
-		Age    int
-		//Emails []string
-		//Extra  map[string]string
+	input := map[string]interface{}{
+		"name":   123,                      // number => string
+		"age":    "42",                     // string => number
+		"emails": map[string]interface{}{}, // empty map => empty array
 	}
-	p:=reflect.ValueOf(nil)
-	pp:=&p
-	fmt.Println(reflect.ValueOf(pp).IsValid())
+	//var v *int
+	vv:=reflect.ValueOf(input["emails"]).Elem().Kind()
+	fmt.Println(vv)
 	// This input can come from anywhere, but typically comes from
 	// something like decoding JSON where we're not quite sure of the
 	// struct initially.

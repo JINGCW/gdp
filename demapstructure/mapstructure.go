@@ -2,7 +2,9 @@ package demapstructure
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
+	"strconv"
 )
 
 type DecodeHookFunc interface{}
@@ -164,23 +166,115 @@ func (d *Decoder) decode(name string, input interface{}, outVal reflect.Value) e
 		}
 	}
 
-	var err error
-	outputKind:=getKind(outVal)
-	switch outputKind {
-	
-	}
-	
+	//var err error
+	//outputKind:=getKind(outVal)
+	//switch outputKind {
+	//
+	//}
 
 	return nil
 }
 
-func(d*Decoder)decodeBool(name string,data interface{},val reflect.Value)error{
-	dataVal:=reflect.Indirect(reflect.ValueOf(data))
-	dataKind:=dataVal.Kind()
+func (d *Decoder) decodeBool(name string, data interface{}, val reflect.Value) error {
+	dataVal := reflect.Indirect(reflect.ValueOf(data))
+	dataKind := dataVal.Kind()
 
 	switch {
-	case dataKind==reflect.Bool:
+	case dataKind == reflect.Bool:
+		val.SetBool(dataVal.Bool())
+	case dataKind == reflect.Int && d.config.WeaklyTypedInput:
+		val.SetBool(dataVal.Int() != 0)
+	case dataKind == reflect.Uint && d.config.WeaklyTypedInput:
+		val.SetBool(dataVal.Uint() != 0)
+	case dataKind == reflect.Float32 && d.config.WeaklyTypedInput:
+		val.SetBool(dataVal.Float() != 0)
+	case dataKind == reflect.String && d.config.WeaklyTypedInput:
+		b, err := strconv.ParseBool(dataVal.String())
+		if err == nil {
+			val.SetBool(b)
+		} else if dataVal.String() == "" {
+			val.SetBool(false)
+		} else {
+			fmt.Errorf("'%s' expected type '%s', got unconvertible type '%s'",
+				name, val.Type(), dataVal.Type())
+		}
+	}
+	return nil
+}
 
+// This decodes a basic type (bool, int, string, etc.) and sets the
+// value to "data" of that type.
+func (d *Decoder) decodeBasic(name string, data interface{}, val reflect.Value) error {
+	if val.IsValid() && val.Elem().IsValid() {
+		return d.decode(name, data, val.Elem())
+	}
+
+	dataVal := reflect.ValueOf(data)
+	// If the input data is a pointer, and the assigned type is the dereference
+	// of that exact pointer, then indirect it so that we can assign it.
+	// Example: *string to string
+	if dataVal.Kind() == reflect.Ptr && dataVal.Type().Elem() == val.Type() {
+		dataVal = reflect.Indirect(dataVal)
+	}
+
+	if !dataVal.IsValid() {
+		dataVal = reflect.Zero(val.Type())
+	}
+
+	dataValType := dataVal.Type()
+	if !dataValType.AssignableTo(val.Type()) {
+		return fmt.Errorf(
+			"'%s' expected type '%s', got '%s'",
+			name, val.Type(), dataValType)
+	}
+
+	val.Set(dataVal)
+	return nil
+}
+
+func (d *Decoder) decodeString(name string, data interface{}, val reflect.Value) error {
+	dataVal := reflect.Indirect(reflect.ValueOf(data))
+	dataKind := getKind(dataVal)
+
+	converted := true
+	switch {
+	case dataKind == reflect.String:
+		val.SetString(dataVal.String())
+	case dataKind == reflect.Bool && d.config.WeaklyTypedInput:
+		if dataVal.Bool() {
+			val.SetString("1")
+		} else {
+			val.SetString("0")
+		}
+	case dataKind == reflect.Int && d.config.WeaklyTypedInput:
+		val.SetString(strconv.FormatInt(dataVal.Int(), 10))
+	case dataKind == reflect.Float32 && d.config.WeaklyTypedInput:
+		val.SetString(strconv.FormatFloat(dataVal.Float(), 'f', -1, 64))
+	case dataKind == reflect.Slice && d.config.WeaklyTypedInput,
+		dataKind == reflect.Array && d.config.WeaklyTypedInput:
+		dataType := dataVal.Type()
+		elemKind := dataType.Elem().Kind()
+		switch elemKind {
+		case reflect.Uint8:
+			var uints []uint8
+			if dataKind == reflect.Array {
+				uints = make([]uint8, dataVal.Len(), dataVal.Len())
+				for i := range uints {
+					uints[i] = dataVal.Index(i).Interface().(uint8)
+				}
+			} else {
+				uints = dataVal.Interface().([]uint8)
+			}
+			val.SetString(string(uints))
+		default:
+			converted = false
+		}
+	default:
+		converted = false
+	}
+	if !converted {
+		return fmt.Errorf("'%s' expected type '%s', got unconvertible type '%s'",
+			name, val.Type(), dataVal.Type())
 	}
 	return nil
 }
