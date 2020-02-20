@@ -4,7 +4,8 @@
 [![GoDoc](https://godoc.org/github.com/JINGCW/go_decompose?status.svg)](https://godoc.org/github.com/JINGCW/go_decompose)
 
 API docs: https://godoc.org/github.com/JINGCW/go_decompose.
+
 Examples: https://godoc.org/github.com/JINGCW/go_decompose#pkg-examples.
 
-##Installation
+## Installation
 
