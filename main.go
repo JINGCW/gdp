@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"reflect"
-)
-
 //
 //const (
 //	mask uintptr = 1<<5 - 1
@@ -46,14 +41,7 @@ type test interface {
 
 
 func main() {
-	input := map[string]interface{}{
-		"name":   123,                      // number => string
-		"age":    "42",                     // string => number
-		"emails": map[string]interface{}{}, // empty map => empty array
-	}
-	//var v *int
-	vv:=reflect.ValueOf(input["emails"]).Type().Elem().Kind()
-	fmt.Println(vv)
+	//dego_redis.ExampleClient()
 	// This input can come from anywhere, but typically comes from
 	// something like decoding JSON where we're not quite sure of the
 	// struct initially.
