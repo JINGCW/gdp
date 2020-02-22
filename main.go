@@ -41,7 +41,6 @@ type test interface {
 
 
 func main() {
-	//dego_redis.ExampleClient()
 	// This input can come from anywhere, but typically comes from
 	// something like decoding JSON where we're not quite sure of the
 	// struct initially.
