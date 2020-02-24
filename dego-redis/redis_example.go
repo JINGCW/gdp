@@ -6,22 +6,28 @@ import (
 	"github.com/go-redis/redis/v7"
 )
 
+type Usr struct {
+	UserName string
+	Email    string
+	Id       int
+}
+
 func ExampleClient(addrp, passwd string) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     addrp,
 		Password: passwd,
 		DB:       0,
 	})
-	err := client.Set("qiming", "xie", 0).Err()
+	err := client.Set("hello", "world", 0).Err()
 	if err != nil {
 		panic(err)
 	}
 
-	val, err := client.Get("qiming").Result()
+	val, err := client.Get("hello").Result()
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("qiming ", val)
+	fmt.Println("hello ", val)
 
 	val2, err := client.Get("key2").Result()
 	if err == redis.Nil {
@@ -38,21 +44,23 @@ func ExampleStructSet(addrp, passwd string) error {
 		Addr:     addrp,
 		Password: passwd,
 		DB:       0,})
-	s := struct {
-		UserName string
-		email    string
-		id       int
-	}{"otto", "otto@repoment.com", 123456}
+	s := Usr{"apple", "otto@repoment.com", 123456}
 	//serialize object to JSON
-	js, err := json.Marshal(&s)
+	js, err := json.Marshal(s)
 	fmt.Println(js)
 	if err != nil {
 		return err
 	}
-	e := client.Set("user:"+s.UserName, js, 0).Err()
+	//e := client.Set("user:"+s.UserName, js, 0).Err()
+	e := client.Set("user:"+s.UserName,js,0).Err()
 	if e != nil {
 		return e
 	}
+	//err= json.Unmarshal(js,&s)
+	//if err != nil {
+	//	return err
+	//}
+	//fmt.Println(js)
 	return nil
 }
 
@@ -61,11 +69,7 @@ func ExampleStructGET(addrp, passwd, key string) error {
 		Addr:     addrp,
 		Password: passwd,
 		DB:       0,})
-	s := struct {
-		UserName string
-		email    string
-		id       int
-	}{}
+	s := Usr{}
 	out,err:=client.Get(key).Bytes()
 	if err == redis.Nil {
 		fmt.Println("key2 dose not exist")
@@ -77,10 +81,9 @@ func ExampleStructGET(addrp, passwd, key string) error {
 		panic(e)
 	}
 
-	fmt.Println("bytes: ", out)
-	fmt.Printf("unmarshal :%T\n", s)
+	fmt.Printf("unmarshal :%v\n", s)
 	fmt.Println(s.UserName)
-	fmt.Println(s.email)
-	fmt.Println(s.id)
+	fmt.Println(s.Email)
+	fmt.Println(s.Id)
 	return nil
 }

@@ -16,4 +16,4 @@ naries for programs and plugins
 
 # self
 /.idea
-/vendor
+vendor/
