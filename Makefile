@@ -14,6 +14,4 @@ run:
 	go run mydir/..
 
 make-test:
-	@echo --compiling--
-	echo --compiling--
-
+	mkdir -p bin config && bash --version
