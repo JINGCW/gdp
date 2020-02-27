@@ -1,4 +1,4 @@
-package demapstructure
+package main
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func typedDecodeHook(h DecodeHookFunc)DecodeHookFunc{
+func typedDecodeHook(h DecodeHookFunc) DecodeHookFunc {
 	var f1 DecodeHookFuncType
 	var f2 DecodeHookFuncKind
 

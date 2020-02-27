@@ -1,8 +1,19 @@
 .DEFAULT_GOAL :=all
 
-all: test build
+all: dec-redis dec-mapstructure
+
+dec-deps:
+	@mkdir -p bin config
+
+dec-redis: dec-deps
+	go build -i -o bin/dec-redis ./src/dego-redis
+
+dec-mapstructure: dec-deps
+	go build -i -o bin/dec-mapstructure ./src/demapstructure
+
 build:
-	go build -o mybin -v
+	@mkdir -p bin
+	go build -o bin/project -v
 test:
 	go test -v ./...
 clean:

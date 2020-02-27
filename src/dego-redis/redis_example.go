@@ -1,4 +1,4 @@
-package dego_redis
+package main
 
 import (
 	"encoding/json"

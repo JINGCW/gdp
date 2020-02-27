@@ -1,4 +1,4 @@
-package dereflect
+package main
 
 import "unsafe"
 
@@ -76,17 +76,17 @@ func ValueOf(i interface{}) Value {
 	return UnpackEface(i)
 }
 
-func(v Value)Kind()Kind{
+func(v Value)Kind() Kind {
 	return v.kind()
 }
 
-func (f flag)kind()Kind{
+func (f flag)kind() Kind {
 	return Kind(f&flagKindMask)
 }
 
 type ValueError struct {
 	Method string
-	Kind Kind
+	Kind   Kind
 }
 
 //func (v Value)Type()Type{

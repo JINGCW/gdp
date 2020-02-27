@@ -1,4 +1,4 @@
-package demapstructure
+package main
 
 import (
 	"errors"

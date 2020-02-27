@@ -1,4 +1,4 @@
-package dereflect
+package main
 
 import (
 	"strconv"
@@ -208,9 +208,9 @@ type Method struct {
 	Name string
 	PkgName string
 
-	Type Type
-	Func Value//func with receiver as first argument
-	Index int//index for Type.Method
+	Type  Type
+	Func  Value //func with receiver as first argument
+	Index int   //index for Type.Method
 }
 
 // ChanDir represents a channel type's direction.
