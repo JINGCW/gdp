@@ -87,3 +87,15 @@ func ExampleStructGET(addrp, passwd, key string) error {
 	fmt.Println(s.Id)
 	return nil
 }
+
+func ExampleCornerCases(addrp, passwd, key string)error{
+	//client := redis.NewClient(&redis.Options{
+	//	Addr:     addrp,
+	//	Password: passwd,
+	//	DB:       0,})
+
+	//custom command
+	//res,err:=client.Do("set","key","value").Result()
+
+	return nil;
+}
