@@ -1,4 +1,4 @@
-package main
+package dego
 
 import "github.com/go-redis/redis/v7"
 

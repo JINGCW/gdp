@@ -17,8 +17,6 @@ package main
 //const temp  = (^uintptr(0) >> 1)
 //const MaxUintptr = ^uintptr(0)
 
-
-
 func main() {
 	//if e!=nil{
 	//	panic(e)

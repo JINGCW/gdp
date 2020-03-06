@@ -1,4 +1,4 @@
-package main
+package dego
 
 import (
 	"encoding/json"
