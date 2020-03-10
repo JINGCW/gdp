@@ -16,4 +16,6 @@ naries for programs and plugins
 
 # self
 /.idea
-#vendor/
+/config
+config.yml
+vendor/

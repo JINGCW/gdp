@@ -1,5 +1,10 @@
 package main
 
+import (
+	"github.com/spf13/viper"
+	"hash_collections/config"
+)
+
 //
 //const (
 //	mask uintptr = 1<<5 - 1
@@ -18,6 +23,9 @@ package main
 //const MaxUintptr = ^uintptr(0)
 
 func main() {
+	config.ReadInConfig()
+	println(viper.GetString("host_port"))
+	//_ = dego.ZsetEX(viper.GetString("host_port"), viper.GetString("passwd"))
 	//if e!=nil{
 	//	panic(e)
 	//}

@@ -10,7 +10,8 @@ func ZsetEX(addr, passwd string) error {
 		MinIdleConns: 2,
 	})
 
-	out, err := pool.ZAdd("zset_ex", &redis.Z{1, "redis"}, &redis.Z{2, "mongodb"}).Result()
+	//out, err := pool.ZAdd("zset_ex", &redis.Z{1, "redis"}, &redis.Z{2, "mongodb"}).Result()
+	out, err := pool.ZAdd("zset_ex", &redis.Z{3, "mysql"}).Result()
 	println(out)
 	if err != nil {
 		return err
