@@ -1,6 +1,6 @@
 package main
 
-import "fmt"
+import "hash_collections/deracy"
 
 //
 //const (
@@ -20,7 +20,8 @@ import "fmt"
 //const MaxUintptr = ^uintptr(0)
 
 func main() {
-	fmt.Printf("%x\n",-1&-1)
+	deracy.TimerRacySafe()
+	//fmt.Printf("%x\n",-1&-1)
 	//desync.MuDemo()
 	//config.ReadInConfig()
 	//println(viper.GetString("host_port"))
