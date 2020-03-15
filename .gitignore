@@ -4,6 +4,7 @@ naries for programs and plugins
 *.dll
 *.so
 *.dylib
+*.a
 
 # Test binary, built with `go test -c`
 *.test
