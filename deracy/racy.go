@@ -2,7 +2,6 @@ package deracy
 
 import (
 	"fmt"
-	"io"
 	"math/rand"
 	"time"
 )
@@ -38,6 +37,5 @@ func TimerRacySafe() {
 func randomDuration() time.Duration {
 	dura := time.Duration(rand.Int63n(1e9))
 	println("dura: ", dura)
-	io.Copy()
 	return dura
 }
