@@ -3,6 +3,7 @@ package deracy
 import (
 	"fmt"
 	"math/rand"
+	"net/http"
 	"syscall"
 	"time"
 )
@@ -63,6 +64,13 @@ func SockServer() {
 	var d syscall.WSAData
 	syscall.WSAStartup(uint32(0x202), &d)
 	var buf []byte
+	bufdata := syscall.WSABuf{
+		Len: uint32(4),
+		Buf: &buf[0],
+	}
+	o := syscall.Overlapped{}
+	flags := uint32(0)
+	qty := uint32(0)
 	for {
 		syscall.Accept(sockfd)
 		//bufdata := syscall.WSABuf{
@@ -72,8 +80,8 @@ func SockServer() {
 		//o := syscall.Overlapped{}
 		//flags := uint32(0)
 		//qty := uint32(0)
-		//syscall.WSARecv(sockfd, &bufdata, 1, &qty, &flags, &o, nil)
-		syscall.Recvfrom(sockfd, buf, 1)
+		syscall.WSARecv(sockfd, &bufdata, 1, &qty, &flags, &o, nil)
+		//syscall.Recvfrom(sockfd, buf, 1)
 		//fmt.Println(bufdata)
 		if len(buf) != 0 {
 			println(buf)
@@ -110,4 +118,5 @@ func SockClient() {
 	} else {
 		println("Send success")
 	}
+	http.ListenAndServe()
 }
