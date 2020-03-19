@@ -1,8 +1,6 @@
 package main
 
-import (
-	"hash_collections/deracy"
-)
+import "hash_collections/deracy"
 
 //
 //const (
@@ -22,7 +20,8 @@ import (
 //const MaxUintptr = ^uintptr(0)
 
 func main() {
-	deracy.TimerRacy()
+	//deracy.SockServer()
+	deracy.SockClient()
 	//fmt.Printf("%x\n",-1&-1)
 	//desync.MuDemo()
 	//config.ReadInConfig()
