@@ -3,7 +3,6 @@ package deracy
 import (
 	"fmt"
 	"math/rand"
-	"net/http"
 	"syscall"
 	"time"
 )
@@ -118,5 +117,4 @@ func SockClient() {
 	} else {
 		println("Send success")
 	}
-	http.ListenAndServe()
 }
