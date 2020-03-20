@@ -1,6 +1,6 @@
 package main
 
-import "hash_collections/deracy"
+import "hash_collections/src/deracy"
 
 //
 //const (
