@@ -1,12 +1,12 @@
 # GDP
 <img src="doc/pictures/Go.gif" height=120></img>
 
-[![Build Status](https://travis-ci.org/JINGCW/go_decompose.png?branch=develop)](https://travis-ci.org/JINGCW/go_decompose)
-[![GoDoc](https://godoc.org/github.com/JINGCW/go_decompose?status.svg)](https://godoc.org/github.com/JINGCW/go_decompose)
+[![Build Status](https://travis-ci.org/JINGCW/gdp.png?branch=develop)](https://travis-ci.org/JINGCW/gdp)
+[![GoDoc](https://godoc.org/github.com/JINGCW/gdp?status.svg)](https://godoc.org/github.com/JINGCW/gdp)
 
-API docs: https://godoc.org/github.com/JINGCW/go_decompose.
+API docs: https://godoc.org/github.com/JINGCW/gdp.
 
-Examples: https://godoc.org/github.com/JINGCW/go_decompose#pkg-examples.
+Examples: https://godoc.org/github.com/JINGCW/gdp#pkg-examples.
 
 ## Donation
 Donate if you want to help us maintaining this project. Thank you!
