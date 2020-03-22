@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
+	"net/http"
 )
 
 func main() {
@@ -20,4 +22,8 @@ func main() {
 	fmt.Println("send message: " + string(msg))
 	_, err = conn.Read(msg[:])
 	fmt.Println("recv message: " + string(msg))
+	http.HandleFunc()
+	http.Handle()
+	http.ListenAndServe()
+	log.Fatal()
 }
