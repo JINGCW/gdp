@@ -35,4 +35,5 @@ func MuDemo() {
 	fmt.Printf("return from channel %d\n",<-ch)
 	fmt.Printf("return from channel %d\n",<-ch)
 	fmt.Printf("return from final channel %d\n",<-ch)
+	sync.Cond.Wait()
 }
