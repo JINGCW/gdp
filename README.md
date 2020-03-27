@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/JINGCW/gdp.png?branch=develop)](https://travis-ci.org/JINGCW/gdp)
 [![GoDoc](https://godoc.org/github.com/JINGCW/gdp?status.svg)](https://godoc.org/github.com/JINGCW/gdp)
-[![Coverage Status](https://coveralls.io/repos/github/JINGCW/gdp/badge.svg?branch=develop)](https://coveralls.io/github/JINGCW/gdp?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/JINGCW/gdp/badge.svg)](https://coveralls.io/github/JINGCW/gdp)
 
 API docs: https://godoc.org/github.com/JINGCW/gdp.
 
