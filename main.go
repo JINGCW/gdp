@@ -1,6 +1,5 @@
 package main
 
-import "hash_collections/src/deracy"
 
 //
 //const (
@@ -21,7 +20,7 @@ import "hash_collections/src/deracy"
 
 func main() {
 	//deracy.SockServer()
-	deracy.SockClient()
+	//deracy.SockClient()
 	//fmt.Printf("%x\n",-1&-1)
 	//desync.MuDemo()
 	//config.ReadInConfig()
