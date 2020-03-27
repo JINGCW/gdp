@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-func main() {
+func main1() {
 	ln, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		panic(err)
