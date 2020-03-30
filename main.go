@@ -1,6 +1,5 @@
 package main
 
-
 //
 //const (
 //	mask uintptr = 1<<5 - 1
@@ -25,7 +24,7 @@ func main() {
 	//desync.MuDemo()
 	//config.ReadInConfig()
 	//println(viper.GetString("host_port"))
-	//_ = dego.ZsetEX(viper.GetString("host_port"), viper.GetString("passwd"))
+	//dego.Cclient([]string{viper.GetString("host_port")}, viper.GetString("passwd"))
 	//if e!=nil{
 	//	panic(e)
 	//}
