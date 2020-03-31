@@ -23,8 +23,8 @@ func main() {
 	//fmt.Printf("%x\n",-1&-1)
 	//desync.MuDemo()
 	//config.ReadInConfig()
-	//println(viper.GetString("host_port"))
-	//dego.Cclient([]string{viper.GetString("host_port")}, viper.GetString("passwd"))
+	//fmt.Println(viper.GetStringSlice("cluster_hp"))
+	//_=dego.Cclient(viper.GetStringSlice("cluster_hp"), viper.GetString("passwd"))
 	//if e!=nil{
 	//	panic(e)
 	//}
