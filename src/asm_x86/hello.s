@@ -11,6 +11,7 @@ START:	MOV  AX,  DATA						;程序开始的地方
 		MOV  AX,  STACK
 		MOV  SS,  AX
 		LEA  DX,  STRING
+		CALL
 		MOV  AH, 09H
 		INT  21H
 		MOV  AH,  4CH

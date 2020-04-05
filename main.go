@@ -17,7 +17,17 @@ package main
 //const temp  = (^uintptr(0) >> 1)
 //const MaxUintptr = ^uintptr(0)
 
+//}
+
 func main() {
+	print(1)
+	//gid.GoID()
+	//var m = map[int]int{}
+	//m[43] = 1
+	//var n = map[string]int{}
+	//n["abc"] = 1
+	//println(m, n)
+	//fmt.Println(add_sub_mul.ArraySum([]int64{12, 3, 4}))
 	//deracy.SockServer()
 	//deracy.SockClient()
 	//fmt.Printf("%x\n",-1&-1)
