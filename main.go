@@ -20,7 +20,7 @@ package main
 //}
 
 func main() {
-	print(1)
+	//fmt.Println(add_sub_mul.Output2(3,4))
 	//gid.GoID()
 	//var m = map[int]int{}
 	//m[43] = 1

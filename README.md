@@ -1,5 +1,6 @@
 # GDP
-<img src="doc/pictures/Go.gif" height=120></img>
+#<img src="doc/pictures/Go.gif" height=120></img>
+![Gopher image](doc/pictures/fiveyears.jpg)
 
 [![Build Status](https://travis-ci.org/JINGCW/gdp.png?branch=develop)](https://travis-ci.org/JINGCW/gdp)
 [![GoDoc](https://godoc.org/github.com/JINGCW/gdp?status.svg)](https://godoc.org/github.com/JINGCW/gdp)

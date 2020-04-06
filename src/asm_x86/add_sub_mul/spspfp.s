@@ -3,6 +3,7 @@
 //func Output(int)(int,int,int)
 TEXT ·Output(SB),$8-48
     MOVQ 24(SP),DX
+    //MOVQ 16(SP),DX
     MOVQ DX,ret3+24(FP)
     MOVQ arg0+16(SP),BX
     MOVQ BX,ret2+16(FP)
@@ -12,13 +13,21 @@ TEXT ·Output(SB),$8-48
 
 // func output(a,b int) int
 TEXT ·Output2(SB), NOSPLIT, $24-8
-    MOVQ a+0(FP), DX // arg a
-    MOVQ DX, 0(SP) // arg x
+    //MOVQ a+0(FP), DX // arg a
+    MOVQ a+16(SP), DX // arg a
+    //MOVQ DX, 0(SP) // arg x
+    MOVQ DX, argx-24(SP) // arg x
     MOVQ b+8(FP), CX // arg b
     MOVQ CX, 8(SP) // arg y
     CALL ·Add_x86(SB) // 在调用 add 之前，已经把参数都通过物理寄存器 SP 搬到了函数的栈顶
     MOVQ 16(SP), AX // add 函数会把返回值放在这个位置
     MOVQ AX, ret+16(FP) // return result
+    RET
+TEXT ·Add_x86(SB),NOSPLIT,$0-24
+    MOVQ a+0(FP),AX
+    MOVQ b+8(FP),BX
+    ADDQ BX,AX
+    MOVQ AX,ret+16(FP)
     RET
 
 //func ArraySum(arr []int64)int64
