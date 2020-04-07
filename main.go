@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"hash_collections/src/asm_x86/gid"
+)
+
 //
 //const (
 //	mask uintptr = 1<<5 - 1
@@ -20,6 +25,7 @@ package main
 //}
 
 func main() {
+	fmt.Println(gid.Get_gid())
 	//fmt.Println(add_sub_mul.Output2(3,4))
 	//gid.GoID()
 	//var m = map[int]int{}

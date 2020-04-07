@@ -1,7 +1,8 @@
-package mapstructure
+package test
 
 import (
 	"errors"
+	"hash_collections/src/mapstructure"
 	"net"
 	"reflect"
 	"testing"
@@ -23,9 +24,9 @@ func TestComposeDecodeHookFunc(t *testing.T) {
 		return data.(string) + "bar", nil
 	}
 
-	f := ComposeDecodeHookFunc(f1, f2)
+	f := mapstructure.ComposeDecodeHookFunc(f1, f2)
 
-	result, err := DecodeHookExec(
+	result, err := mapstructure.DecodeHookExec(
 		f, reflect.TypeOf(""), reflect.TypeOf([]byte("")), "")
 	if err != nil {
 		t.Fatalf("bad: %s", err)
@@ -44,9 +45,9 @@ func TestComposeDecodeHookFunc_err(t *testing.T) {
 		panic("NOPE")
 	}
 
-	f := ComposeDecodeHookFunc(f1, f2)
+	f := mapstructure.ComposeDecodeHookFunc(f1, f2)
 
-	_, err := DecodeHookExec(
+	_, err := mapstructure.DecodeHookExec(
 		f, reflect.TypeOf(""), reflect.TypeOf([]byte("")), 42)
 	if err.Error() != "foo" {
 		t.Fatalf("bad: %s", err)
@@ -71,9 +72,9 @@ func TestComposeDecodeHookFunc_kinds(t *testing.T) {
 		return data, nil
 	}
 
-	f := ComposeDecodeHookFunc(f1, f2)
+	f := mapstructure.ComposeDecodeHookFunc(f1, f2)
 
-	_, err := DecodeHookExec(
+	_, err := mapstructure.DecodeHookExec(
 		f, reflect.TypeOf(""), reflect.TypeOf([]byte("")), "")
 	if err != nil {
 		t.Fatalf("bad: %s", err)
@@ -84,7 +85,7 @@ func TestComposeDecodeHookFunc_kinds(t *testing.T) {
 }
 
 func TestStringToSliceHookFunc(t *testing.T) {
-	f := StringToSliceHookFunc(",")
+	f := mapstructure.StringToSliceHookFunc(",")
 
 	strType := reflect.TypeOf("")
 	sliceType := reflect.TypeOf([]byte(""))
@@ -113,7 +114,7 @@ func TestStringToSliceHookFunc(t *testing.T) {
 	}
 
 	for i, tc := range cases {
-		actual, err := DecodeHookExec(f, tc.f, tc.t, tc.data)
+		actual, err := mapstructure.DecodeHookExec(f, tc.f, tc.t, tc.data)
 		if tc.err != (err != nil) {
 			t.Fatalf("case %d: expected err %#v", i, tc.err)
 		}
@@ -126,7 +127,7 @@ func TestStringToSliceHookFunc(t *testing.T) {
 }
 
 func TestStringToTimeDurationHookFunc(t *testing.T) {
-	f := StringToTimeDurationHookFunc()
+	f := mapstructure.StringToTimeDurationHookFunc()
 
 	strType := reflect.TypeOf("")
 	timeType := reflect.TypeOf(time.Duration(5))
@@ -142,7 +143,7 @@ func TestStringToTimeDurationHookFunc(t *testing.T) {
 	}
 
 	for i, tc := range cases {
-		actual, err := DecodeHookExec(f, tc.f, tc.t, tc.data)
+		actual, err := mapstructure.DecodeHookExec(f, tc.f, tc.t, tc.data)
 		if tc.err != (err != nil) {
 			t.Fatalf("case %d: expected err %#v", i, tc.err)
 		}
@@ -171,8 +172,8 @@ func TestStringToTimeHookFunc(t *testing.T) {
 	}
 
 	for i, tc := range cases {
-		f := StringToTimeHookFunc(tc.layout)
-		actual, err := DecodeHookExec(f, tc.f, tc.t, tc.data)
+		f := mapstructure.StringToTimeHookFunc(tc.layout)
+		actual, err := mapstructure.DecodeHookExec(f, tc.f, tc.t, tc.data)
 		if tc.err != (err != nil) {
 			t.Fatalf("case %d: expected err %#v", i, tc.err)
 		}
@@ -200,8 +201,8 @@ func TestStringToIPHookFunc(t *testing.T) {
 	}
 
 	for i, tc := range cases {
-		f := StringToIPHookFunc()
-		actual, err := DecodeHookExec(f, tc.f, tc.t, tc.data)
+		f := mapstructure.StringToIPHookFunc()
+		actual, err := mapstructure.DecodeHookExec(f, tc.f, tc.t, tc.data)
 		if tc.err != (err != nil) {
 			t.Fatalf("case %d: expected err %#v", i, tc.err)
 		}
@@ -234,8 +235,8 @@ func TestStringToIPNetHookFunc(t *testing.T) {
 	}
 
 	for i, tc := range cases {
-		f := StringToIPNetHookFunc()
-		actual, err := DecodeHookExec(f, tc.f, tc.t, tc.data)
+		f := mapstructure.StringToIPNetHookFunc()
+		actual, err := mapstructure.DecodeHookExec(f, tc.f, tc.t, tc.data)
 		if tc.err != (err != nil) {
 			t.Fatalf("case %d: expected err %#v", i, tc.err)
 		}
@@ -248,7 +249,7 @@ func TestStringToIPNetHookFunc(t *testing.T) {
 }
 
 func TestWeaklyTypedHook(t *testing.T) {
-	var f DecodeHookFunc = WeaklyTypedHook
+	var f mapstructure.DecodeHookFunc = mapstructure.WeaklyTypedHook
 
 	boolType := reflect.TypeOf(true)
 	strType := reflect.TypeOf("")
@@ -310,7 +311,7 @@ func TestWeaklyTypedHook(t *testing.T) {
 	}
 
 	for i, tc := range cases {
-		actual, err := DecodeHookExec(f, tc.f, tc.t, tc.data)
+		actual, err := mapstructure.DecodeHookExec(f, tc.f, tc.t, tc.data)
 		if tc.err != (err != nil) {
 			t.Fatalf("case %d: expected err %#v", i, tc.err)
 		}

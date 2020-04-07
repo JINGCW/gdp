@@ -1,7 +1,8 @@
-package mapstructure
+package test
 
 import (
 	"fmt"
+	"hash_collections/src/mapstructure"
 )
 
 func ExampleDecode() {
@@ -25,7 +26,7 @@ func ExampleDecode() {
 	}
 
 	var result Person
-	err := Decode(input, &result)
+	err := mapstructure.Decode(input, &result)
 	if err != nil {
 		panic(err)
 	}
@@ -53,7 +54,7 @@ func ExampleDecode_errors() {
 	}
 
 	var result Person
-	err := Decode(input, &result)
+	err := mapstructure.Decode(input, &result)
 	if err == nil {
 		panic("should have an error")
 	}
@@ -87,14 +88,14 @@ func ExampleDecode_metadata() {
 	// For metadata, we make a more advanced DecoderConfig so we can
 	// more finely configure the decoder that is used. In this case, we
 	// just tell the decoder we want to track metadata.
-	var md Metadata
+	var md mapstructure.Metadata
 	var result Person
-	config := &DecoderConfig{
+	config := &mapstructure.DecoderConfig{
 		Metadata: &md,
 		Result:   &result,
 	}
 
-	decoder, err := NewDecoder(config)
+	decoder, err := mapstructure.NewDecoder(config)
 	if err != nil {
 		panic(err)
 	}
@@ -125,12 +126,12 @@ func ExampleDecode_weaklyTypedInput() {
 	}
 
 	var result Person
-	config := &DecoderConfig{
+	config := &mapstructure.DecoderConfig{
 		WeaklyTypedInput: true,
 		Result:           &result,
 	}
 
-	decoder, err := NewDecoder(config)
+	decoder, err := mapstructure.NewDecoder(config)
 	if err != nil {
 		panic(err)
 	}
@@ -158,7 +159,7 @@ func ExampleDecode_tags() {
 	}
 
 	var result Person
-	err := Decode(input, &result)
+	err := mapstructure.Decode(input, &result)
 	if err != nil {
 		panic(err)
 	}
@@ -192,7 +193,7 @@ func ExampleDecode_embeddedStruct() {
 	}
 
 	var result Person
-	err := Decode(input, &result)
+	err := mapstructure.Decode(input, &result)
 	if err != nil {
 		panic(err)
 	}

@@ -1,8 +1,6 @@
-package gid
+package g
 
-import "runtime"
-
-var offsetDict = map[string]int64{
+var offset_gid = map[string]int64{
 	"go1.4":     128,
 	"go1.4.1":   128,
 	"go1.4.2":   128,
@@ -65,8 +63,51 @@ var offsetDict = map[string]int64{
 	"go1.13":    152,
 }
 
-var offset = offsetDict[runtime.Version()]
-
-
-func Get_gid() (int64,int64)
-//func Get_gid() int64
+//
+//import (
+//	"sync/atomic"
+//	"unsafe"
+//)
+//
+//// NOTE:  Add package header and missing imports.
+//
+//func GoRoutineId() uint64 {
+//
+//	_ptr := uintptr(goRoutinegPtr())
+//	_struct := (*[32]uint64) (unsafe.Pointer(_ptr))
+//
+//	_offset := atomic.LoadUint64(&goRoutineIdOffset)
+//
+//	if _offset != 0 {
+//
+//		return _struct[int(_offset)]
+//
+//	} else {
+//
+//		//_slow := goRoutineIdSlow ()
+//		panic("func goRoutineIdSlow todo")
+//		//_slow:=0
+//		//_matchedCount := 0
+//		//_matchedOffset := 0
+//		//
+//		//for _offset, _value := range _struct[:] {
+//		//	if _value == _slow {
+//		//		_matchedOffset = _offset
+//		//		_matchedCount += 1
+//		//		if _matchedCount >= 2 {
+//		//			break
+//		//		}
+//		//	}
+//		//}
+//		//
+//		//if _matchedCount == 1 {
+//		//	atomic.StoreUint64 (&goRoutineIdOffset, uint64 (_matchedOffset))
+//		//}
+//		//
+//		//return _slow
+//	}
+//}
+//
+//func goRoutinePtr() uint64
+//
+//var goRoutineIdOffset uint64 = 0

@@ -1,4 +1,14 @@
 #include "textflag.h"
+#include "spspfp.h"
+
+TEXT ·OffsetSB(SB),$0
+    //MOVQ .offset(SB),AX
+    //MOVQ AX,ret0+8(FP)
+    MOVQ (TLS),CX
+    //LEAQ 40(GS),CX
+    //MOVQ GS:0x30,CX
+    MOVQ CX,ret0+8(FP)
+    RET
 
 //func Output(int)(int,int,int)
 TEXT ·Output(SB),$8-48
@@ -14,7 +24,8 @@ TEXT ·Output(SB),$8-48
 // func output(a,b int) int
 TEXT ·Output2(SB), NOSPLIT, $24-8
     //MOVQ a+0(FP), DX // arg a
-    MOVQ a+16(SP), DX // arg a
+    //MOVQ a+16(SP), DX // arg a
+    CODEINLINE
     //MOVQ DX, 0(SP) // arg x
     MOVQ DX, argx-24(SP) // arg x
     MOVQ b+8(FP), CX // arg b
