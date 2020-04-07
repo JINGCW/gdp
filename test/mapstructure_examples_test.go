@@ -33,7 +33,7 @@ func ExampleDecode() {
 
 	fmt.Printf("%#v", result)
 	// Output:
-	// mapstructure.Person{Name:"Mitchell", Age:91, Emails:[]string{"one", "two", "three"}, Extra:map[string]string{"twitter":"mitchellh"}}
+	// test.Person{Name:"Mitchell", Age:91, Emails:[]string{"one", "two", "three"}, Extra:map[string]string{"twitter":"mitchellh"}}
 }
 
 func ExampleDecode_errors() {
@@ -142,7 +142,7 @@ func ExampleDecode_weaklyTypedInput() {
 	}
 
 	fmt.Printf("%#v", result)
-	// Output: mapstructure.Person{Name:"123", Age:42, Emails:[]string{}}
+	// Output: test.Person{Name:"123", Age:42, Emails:[]string{}}
 }
 
 func ExampleDecode_tags() {
@@ -166,7 +166,7 @@ func ExampleDecode_tags() {
 
 	fmt.Printf("%#v", result)
 	// Output:
-	// mapstructure.Person{Name:"Mitchell", Age:91}
+	// test.Person{Name:"Mitchell", Age:91}
 }
 
 func ExampleDecode_embeddedStruct() {
