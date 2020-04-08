@@ -1,5 +1,7 @@
 package g
 
+import "runtime"
+
 var offset_gid = map[string]int64{
 	"go1.4":     128,
 	"go1.4.1":   128,
@@ -61,6 +63,28 @@ var offset_gid = map[string]int64{
 	"go1.12.6":  152,
 	"go1.12.7":  152,
 	"go1.13":    152,
+	"go1.14.1":  152,
+}
+
+var _offset_gid = offset_gid[runtime.Version()]
+
+func GID() int64
+
+func GPTR() int64
+
+func G_innerouter() (int64, int64) {
+	g0 := GID()
+	//println(g0)
+	//println(GID())
+	//println("==========")
+	ch := make(chan int64)
+	go func() {
+		g1 := GID()
+		//println(GID())
+		//println(g1)
+		ch <- g1
+	}()
+	return g0, <-ch
 }
 
 //

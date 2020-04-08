@@ -1,5 +1,7 @@
 package main
 
+import "hash_collections/src/asm_x86/g"
+
 //
 //const (
 //	mask uintptr = 1<<5 - 1
@@ -20,7 +22,8 @@ package main
 //}
 
 func main() {
-	//fmt.Println(gid.Get_gid())
+	g1,g2:=g.G_innerouter()
+	println(g1,g2)
 	//fmt.Println(add_sub_mul.Output2(3,4))
 	//gid.GoID()
 	//var m = map[int]int{}

@@ -1,0 +1,1 @@
+go internel e book: https://cmc.gitbook.io/go-internals/chapter-i-go-assembly
