@@ -3,7 +3,7 @@
 ;OPTION CASEMAP:NONE		; optional: make identifiers case-sensitive
 
 INCLUDE SmallWin.inc		; MS-Windows prototypes, structures, and constants
-INCLUDE VirtualK.inc
+INCLUDE VirtualKeys.inc
 
 .NOLIST
 ; Last update: 7/29/05
