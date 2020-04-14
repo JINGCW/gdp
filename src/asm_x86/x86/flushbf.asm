@@ -1,6 +1,7 @@
 
 ;.model small,stdcall
 include flushbf.inc
+.model small,stdcall
 
 
 .code

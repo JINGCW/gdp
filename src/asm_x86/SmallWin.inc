@@ -309,7 +309,8 @@ CreateFile PROTO,		; create new file
 	hTemplateFile:DWORD		; handle to template file
 
 ExitProcess PROTO,                  	; exit program
-	dwExitCode:DWORD		; return code
+	dwExitCode:DWORD		; retur
+n code
 
 FileTimeToSystemTime PROTO,		; convert FILETIME to SYSTEMTIME
 	lpFileTime:PTR FILETIME,

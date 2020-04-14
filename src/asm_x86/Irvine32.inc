@@ -6,7 +6,7 @@ INCLUDE SmallWin.inc		; MS-Windows prototypes, structures, and constants
 INCLUDE VirtualKeys.inc
 
 .NOLIST
-; Last update: 7/29/05
+; Last update: 7/29/05F
 
 ;----------------------------------------
 ; Procedure Prototypes
