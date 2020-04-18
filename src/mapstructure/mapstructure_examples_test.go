@@ -1,8 +1,7 @@
-package test
+package mapstructure
 
 import (
 	"fmt"
-	"hash_collections/src/mapstructure"
 )
 
 func ExampleDecode() {
@@ -12,7 +11,6 @@ func ExampleDecode() {
 		Emails []string
 		Extra  map[string]string
 	}
-
 	// This input can come from anywhere, but typically comes from
 	// something like decoding JSON where we're not quite sure of the
 	// struct initially.
@@ -26,14 +24,14 @@ func ExampleDecode() {
 	}
 
 	var result Person
-	err := mapstructure.Decode(input, &result)
+	err := Decode(input, &result)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Printf("%#v", result)
 	// Output:
-	// test.Person{Name:"Mitchell", Age:91, Emails:[]string{"one", "two", "three"}, Extra:map[string]string{"twitter":"mitchellh"}}
+	// mapstructure.Person{Name:"Mitchell", Age:91, Emails:[]string{"one", "two", "three"}, Extra:map[string]string{"twitter":"mitchellh"}}
 }
 
 func ExampleDecode_errors() {
@@ -54,7 +52,7 @@ func ExampleDecode_errors() {
 	}
 
 	var result Person
-	err := mapstructure.Decode(input, &result)
+	err := Decode(input, &result)
 	if err == nil {
 		panic("should have an error")
 	}
@@ -88,14 +86,14 @@ func ExampleDecode_metadata() {
 	// For metadata, we make a more advanced DecoderConfig so we can
 	// more finely configure the decoder that is used. In this case, we
 	// just tell the decoder we want to track metadata.
-	var md mapstructure.Metadata
+	var md Metadata
 	var result Person
-	config := &mapstructure.DecoderConfig{
+	config := &DecoderConfig{
 		Metadata: &md,
 		Result:   &result,
 	}
 
-	decoder, err := mapstructure.NewDecoder(config)
+	decoder, err := NewDecoder(config)
 	if err != nil {
 		panic(err)
 	}
@@ -126,12 +124,12 @@ func ExampleDecode_weaklyTypedInput() {
 	}
 
 	var result Person
-	config := &mapstructure.DecoderConfig{
+	config := &DecoderConfig{
 		WeaklyTypedInput: true,
 		Result:           &result,
 	}
 
-	decoder, err := mapstructure.NewDecoder(config)
+	decoder, err := NewDecoder(config)
 	if err != nil {
 		panic(err)
 	}
@@ -142,12 +140,12 @@ func ExampleDecode_weaklyTypedInput() {
 	}
 
 	fmt.Printf("%#v", result)
-	// Output: test.Person{Name:"123", Age:42, Emails:[]string{}}
+	// Output: mapstructure.Person{Name:"123", Age:42, Emails:[]string{}}
 }
 
 func ExampleDecode_tags() {
 	// Note that the mapstructure tags defined in the struct type
-	// can indicate which fields the values are mapped to.
+	// can indicate whichtest.Person{Name:"Mitchell", Age:91} fields the values are mapped to.
 	type Person struct {
 		Name string `mapstructure:"person_name"`
 		Age  int    `mapstructure:"person_age"`
@@ -159,14 +157,14 @@ func ExampleDecode_tags() {
 	}
 
 	var result Person
-	err := mapstructure.Decode(input, &result)
+	err := Decode(input, &result)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Printf("%#v", result)
 	// Output:
-	// test.Person{Name:"Mitchell", Age:91}
+	// mapstructure.Person{Name:"Mitchell", Age:91}
 }
 
 func ExampleDecode_embeddedStruct() {
@@ -193,7 +191,7 @@ func ExampleDecode_embeddedStruct() {
 	}
 
 	var result Person
-	err := mapstructure.Decode(input, &result)
+	err := Decode(input, &result)
 	if err != nil {
 		panic(err)
 	}

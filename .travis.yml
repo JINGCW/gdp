@@ -13,5 +13,6 @@ before_install:
 
 script:
   - make
-  - go test ./test -v -covermode=count -coverprofile=coverage.out
+#  - go test ./test -v -covermode=count -coverprofile=coverage.out
+  - go test $(go list ./src/...|grep -v ./src/asm*) -v -covermode=count -coverprofile=coverage.out
   - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN

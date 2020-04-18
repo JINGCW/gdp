@@ -1,4 +1,4 @@
-# GDP
+# gdp
 ![Gopher image](doc/pictures/fiveyears.jpg)
 
 [![Build Status](https://travis-ci.org/JINGCW/gdp.png?branch=develop)](https://travis-ci.org/JINGCW/gdp)
