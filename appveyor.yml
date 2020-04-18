@@ -15,6 +15,5 @@ install:
   - go get -d ./...
 
 build_script:
-  - go test -v -cpu=2 ./test
-  - go test -cpu=1,2,4 -short -race ./test
-  -
+  - go test -v -cpu=2 $(go list ./src/...|grep -v ./src/asm*)
+  - go test -cpu=1,2,4 -short -race $(go list ./src/...|grep -v ./src/asm*)
