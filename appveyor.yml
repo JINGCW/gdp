@@ -15,5 +15,5 @@ install:
   - go get -d ./...
 
 build_script:
-  - for /F "usebackq delims=" %aa in (`go list ./src/...^|findstr /v ./src/asm*`) do go test -v -cpu=2 %aa
-  - for /F "usebackq  delims=" %aa in (`go list ./src/...^|findstr /v ./src/asm*`) do go test -v -cpu=1,2,4 -short -race %aa
+  - for /F "usebackq delims=" %%a in (`go list ./src/...^|findstr /v ./src/asm*`) do go test -v -cpu=2 %%a
+  - for /F "usebackq  delims=" %%a in (`go list ./src/...^|findstr /v ./src/asm*`) do go test -v -cpu=1,2,4 -short -race %%a
