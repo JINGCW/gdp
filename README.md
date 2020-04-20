@@ -8,8 +8,8 @@
 
 Platform | CI status
 ---------|:---------
-OSX      |[![OSX Build Status]http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=osx&label=build&branch=develop&go=1.13.x]<br/>[![OSX Build Status]http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=osx&label=build&branch=develop&go=1.14.x]
-Linux    |[![Linux Build Status]http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=linux&label=build&branch=develop&go=1.13.x]<br/>[![Linux Build Status]http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=linux&label=build&branch=develop&go=1.14.x]
+OSX      |[![OSX Build Status](http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=osx&label=build&branch=develop&go=1.13.x)](https://travis-ci.org/JINGCW/gdp)<br/>[![OSX Build Status](http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=osx&label=build&branch=develop&go=1.14.x)](https://travis-ci.org/JINGCW/gdp)
+Linux    |[![Linux Build Status](http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=linux&label=build&branch=develop&go=1.13.x)](https://travis-ci.org/JINGCW/gdp)<br/>[![Linux Build Status](http://badges.herokuapp.com/travis/JINGCW/gdp?env=BADGE=linux&label=build&branch=develop&go=1.14.x)](https://travis-ci.org/JINGCW/gdp)
 API docs: https://godoc.org/github.com/JINGCW/gdp.
 
 Examples: https://godoc.org/github.com/JINGCW/gdp#pkg-examples.
