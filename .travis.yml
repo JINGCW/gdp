@@ -4,8 +4,20 @@ os:
   - linux
   - osx
 
+env:
+  - BADGE=linux
+  - BADGE=osx
+ 
+#hack to get some OS-specific badges
+matrix:
+  - os: linux
+    env: BADGE=osx
+  - os: osx
+    env: BADGE=linux
+
 go:
   - 1.13.x
+  - 1.14.x
  
 before_install:
   - go get golang.org/x/tools/cmd/cover
